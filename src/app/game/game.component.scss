@@ -1,0 +1,52 @@
+.game-fielt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.card-circle {
+    position: relative;
+    width: 600px; // Containergröße
+    height: 600px;
+    margin: 0 auto;
+    border-radius: 50%;
+
+}
+
+
+.card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 90px; // Kartengröße
+    height: auto;
+    //transition: all 125ms ease-in-out; 
+
+    &:hover{
+        border: 3px solid #f50404;
+        border-radius: 7px;
+        cursor: pointer;
+        transform: scale(1.2) translateY(-10px);
+    }
+}
+
+.draw-card-animation {
+  animation: flyOut 600ms ease;
+}
+
+@keyframes flyOut {
+  from {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: translate(700px, -450px) rotate(25deg);
+    opacity: 0;
+  }
+}
+
+.dnone{
+    display: none;
+}
