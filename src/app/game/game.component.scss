@@ -1,41 +1,41 @@
-html.no-scroll,
-body.no-scroll {
-  overflow: hidden !important;
-  height: 100% !important;
-}
-
 .game-fielt {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100vw;
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
 }
 
 .card-circle {
-    position: relative;
-    width: 600px; // Containergröße
-    height: 600px;
-    margin: 0 auto;
-    border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 600px;
+  height: 600px;
+  margin: 0 auto;
+  border-radius: 50%;
+
+  >img {
+    width: 80px;
+    height: auto;
+  }
 
 }
 
+.card-position {
+  position: absolute;
+  top: 50%;
+  left: 50%;
 
-.card {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 90px; // Kartengröße
-    height: auto;
-    //transition: all 125ms ease-in-out; 
-
-    &:hover{
-        border: 3px solid #f50404;
-        border-radius: 7px;
-        cursor: pointer;
-        transform: scale(1.2) translateY(-10px);
-    }
+  &:hover {
+    border: 3px solid #f50404;
+    border-radius: 7px;
+    cursor: pointer;
+    transform: scale(1.2) translateY(-10px);
+  }
 }
 
 .draw-card-animation {
@@ -47,26 +47,21 @@ body.no-scroll {
     transform: translate(0, 0) rotate(0deg);
     opacity: 1;
   }
+
   to {
     transform: translate(700px, -450px) rotate(25deg);
     opacity: 0;
-    
   }
 }
 
-.show-card{
-  position: relative;
-  left: 40%;
+.show-card {
 
-  animation: showCardAnim 5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  transform-origin: center;
-  will-change: transform, opacity;
-
+  animation: showCardAnim 1.7s, forwards;
 }
 
 @keyframes showCardAnim {
   0% {
-    transform: translateY(120vh) scale(1.15) rotate(-6deg);
+    transform: translateY(170vh) scale(1.15) rotate(-6deg);
     opacity: 0;
   }
 
@@ -76,18 +71,27 @@ body.no-scroll {
   }
 
   80% {
-    transform: translateY(114px) scale(0.92) rotate(0deg);
+    transform: translateY(-150px) scale(0.92) rotate(0deg);
   }
 
   100% {
-    transform: translateY(214px) scale(1) rotate(0deg);
+    transform: translateY(0px) scale(1) rotate(0deg);
     opacity: 1;
   }
 }
 
+.stack-of-cards {
+  position: absolute;
+}
 
+.app-player-bar{
+  display: block;
+  width: 100px;
+  margin-bottom: 10px;
+  margin-top: 30px;
+  margin-left: 20px;
+}
 
-
-.dnone{
-    display: none;
+.dnone {
+  display: none;
 }

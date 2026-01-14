@@ -1,9 +1,14 @@
+<app-player class="app-player-bar"  *ngFor="let player of game.players; let i = index" [index]="i" [name]="player"></app-player>
+
 <div class="game-fielt">
   <div class="card-circle">
-    <img *ngFor="let c of cards; let i = index" class="card" [id]="'card-' + i" (click)="pickedCard(i)"
+    <img *ngFor="let c of cards; let i = index" class="card-position" [id]="'card-' + i" (click)="pickedCard(i)"
       [class.draw-card-animation]=" drawCardIndex === i" src="assets/img/playing_cards-master/card_cover.png"
       alt="Card Cover" [style.transform]="cardTransform(i)" />
 
-      <img *ngIf="drawn" class="show-card" src="../../assets/img/playing_cards-master/ace_1.png"/>
+      <img class="stack-of-cards" *ngFor="let card of game.playedCards" src="../../assets/img/playing_cards-master/{{card}}.png"/>
+
+      <img *ngIf="drawn" class="show-card" src="../../assets/img/playing_cards-master/{{currentCard}}.png"/>
+
   </div>
 </div>
