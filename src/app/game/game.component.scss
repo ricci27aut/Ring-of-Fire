@@ -1,3 +1,9 @@
+html.no-scroll,
+body.no-scroll {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
 .game-fielt {
     display: flex;
     align-items: center;
@@ -44,8 +50,43 @@
   to {
     transform: translate(700px, -450px) rotate(25deg);
     opacity: 0;
+    
   }
 }
+
+.show-card{
+  position: relative;
+  left: 40%;
+
+  animation: showCardAnim 5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform-origin: center;
+  will-change: transform, opacity;
+
+}
+
+@keyframes showCardAnim {
+  0% {
+    transform: translateY(120vh) scale(1.15) rotate(-6deg);
+    opacity: 0;
+  }
+
+  55% {
+    transform: translateY(0) scale(1.35) rotate(2deg);
+    opacity: 1;
+  }
+
+  80% {
+    transform: translateY(114px) scale(0.92) rotate(0deg);
+  }
+
+  100% {
+    transform: translateY(214px) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+
+
 
 .dnone{
     display: none;

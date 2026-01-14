@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor , NgIf],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
@@ -25,8 +25,9 @@ export class GameComponent {
   }
 
 
-drawCard(i: number) {
+pickedCard(i: number) {
   this.drawCardIndex = i;
+  this.drawn = true;
 }
 
 }
