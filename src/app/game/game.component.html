@@ -1,4 +1,4 @@
-<app-player class="app-player-bar"  *ngFor="let player of game.players; let i = index" [index]="i" [name]="player"></app-player>
+<app-player class="app-player-bar"  *ngFor="let player of game.players; let i = index" [index]="i" [name]="player" [currentPlayer]=" i === game.currentPlayerIndex"></app-player>
 
 <div class="game-fielt">
   <div class="card-circle">
@@ -12,3 +12,9 @@
 
   </div>
 </div>
+
+<button class="add-button" mat-fab aria-label="Delete" (click)="openDialog()">
+  <mat-icon>add</mat-icon>
+</button>
+
+<app-game-rules-info></app-game-rules-info>

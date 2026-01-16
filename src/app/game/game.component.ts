@@ -2,11 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { Game } from '../../modles/game.modle';
 import { PlayerComponent } from '../player/player.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { DialogAddPlayerComponent } from '../dialog.add.player/dialog.add.player.component';
+import { MatDialog } from '@angular/material/dialog';
+import { GameRulesInfoComponent } from '../game-rules-info/game-rules-info.component'
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [NgFor, NgIf, PlayerComponent],
+  imports: [NgFor, NgIf, PlayerComponent, MatButtonModule, MatIconModule, GameRulesInfoComponent],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
@@ -19,6 +24,8 @@ export class GameComponent implements OnInit {
 
   cards = Array.from({ length: 52 }, (_, i) => i + 1);
   radius = 250;
+
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
     console.log(this.game);
@@ -33,26 +40,46 @@ export class GameComponent implements OnInit {
 
 
   pickedCard(i: number) {
-    
-    if (this.drawn === false) {
-    this.drawn = true;
-    this.drawCardIndex = i;
-    this.getDrawnCard();
-    this.removeCard();
 
-    setTimeout(() => {
-      this.game.playedCards.push(this.currentCard);
-      this.drawn = false;
-    }, 1700);
+    if (this.drawn === false) {
+      this.drawn = true;
+      this.getDrawnCard();
+      this.removeCard();
+
+      setTimeout(() => {
+        this.game.playedCards.push(this.currentCard);
+        this.drawn = false;
+        this.nexstPlayer();
+      }, 1700);
     }
   }
 
-  getDrawnCard(){
+  getDrawnCard() {
     this.currentCard = this.game.stack.pop() ?? ''
   }
 
   removeCard() {
-    
+    // Remove the card from the deck after a delay to allow for animation
   }
 
-};
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogAddPlayerComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      const refArray = this.game.players;
+      if(refArray.length <= 3 && result.length > 0 && result.length <= 8){
+         refArray.push(result);
+      }
+    });
+  }
+
+  nexstPlayer(){
+    const currentIndex = this.game.currentPlayerIndex;
+    const players = this.game.players.length;
+    if(currentIndex >= players-1 ){
+      this.game.currentPlayerIndex = 0;
+    }else{
+      this.game.currentPlayerIndex += 1;
+    }
+  };
+}
