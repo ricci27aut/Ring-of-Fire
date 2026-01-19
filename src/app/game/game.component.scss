@@ -40,24 +40,32 @@
 }
 
 .draw-card-animation {
-  animation: flyOut 600ms ease;
+  animation: pullOut 600ms ease-in forwards;
+  transform-origin: center;
 }
 
-@keyframes flyOut {
-  from {
-    transform: translate(0, 0) rotate(0deg);
+@keyframes pullOut {
+  0% {
+    transform: translate(10, 10) rotate(0deg) scale(1);
     opacity: 1;
   }
 
-  to {
-    transform: translate(700px, -450px) rotate(25deg);
-    opacity: 0;
+  20% {
+    transform: translate(10, 10) rotate(-2deg) scale(1.03);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(700px, -450px) rotate(25deg) scale(0.98);
+    display: none;
+    opacity: 1;
   }
 }
 
+
 .show-card {
 
-  animation: showCardAnim 1.7s, forwards;
+  animation: showCardAnim 1700ms, forwards;
 }
 
 @keyframes showCardAnim {

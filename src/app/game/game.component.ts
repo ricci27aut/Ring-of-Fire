@@ -15,21 +15,18 @@ import { GameRulesInfoComponent } from '../game-rules-info/game-rules-info.compo
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
-export class GameComponent implements OnInit {
+export class GameComponent {
   game: Game = new Game();
   currentCard: string = '';
 
   drawn: boolean = false;
   drawCardIndex: number | null = null;
+  hiddenCards = new Set<number>();
 
   cards = Array.from({ length: 52 }, (_, i) => i + 1);
   radius = 250;
 
   constructor(private dialog: MatDialog) { }
-
-  ngOnInit() {
-    console.log(this.game);
-  }
 
   cardTransform(i: number): string {
     const n = this.cards.length;
@@ -42,9 +39,13 @@ export class GameComponent implements OnInit {
   pickedCard(i: number) {
 
     if (this.drawn === false) {
+      this.drawCardIndex = i
       this.drawn = true;
       this.getDrawnCard();
-      this.removeCard();
+      
+      setTimeout(() => {
+      this.hiddenCards.add(i);
+    }, 600);
 
       setTimeout(() => {
         this.game.playedCards.push(this.currentCard);
@@ -58,27 +59,23 @@ export class GameComponent implements OnInit {
     this.currentCard = this.game.stack.pop() ?? ''
   }
 
-  removeCard() {
-    // Remove the card from the deck after a delay to allow for animation
-  }
-
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogAddPlayerComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       const refArray = this.game.players;
-      if(refArray.length <= 3 && result.length > 0 && result.length <= 8){
-         refArray.push(result);
+      if (refArray.length <= 3 && result.length > 0 && result.length <= 8) {
+        refArray.push(result);
       }
     });
   }
 
-  nexstPlayer(){
+  nexstPlayer() {
     const currentIndex = this.game.currentPlayerIndex;
     const players = this.game.players.length;
-    if(currentIndex >= players-1 ){
+    if (currentIndex >= players - 1) {
       this.game.currentPlayerIndex = 0;
-    }else{
+    } else {
       this.game.currentPlayerIndex += 1;
     }
   };
