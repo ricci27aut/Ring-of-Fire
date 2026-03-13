@@ -6,7 +6,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogAddPlayerComponent } from '../dialog.add.player/dialog.add.player.component';
 import { MatDialog } from '@angular/material/dialog';
-import { GameRulesInfoComponent } from '../game-rules-info/game-rules-info.component'
+import { GameRulesInfoComponent } from '../game-rules-info/game-rules-info.component';
+import { Injectable, inject } from '@angular/core';
+import { Firestore, collection, addDoc, onSnapshot, doc, updateDoc} from '@angular/fire/firestore';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-game',
@@ -18,6 +21,7 @@ import { GameRulesInfoComponent } from '../game-rules-info/game-rules-info.compo
 export class GameComponent {
   game: Game = new Game();
   currentCard: string = '';
+  firestore: Firestore = inject(Firestore);
 
   drawn: boolean = false;
   drawCardIndex: number | null = null;
@@ -26,7 +30,15 @@ export class GameComponent {
   cards = Array.from({ length: 52 }, (_, i) => i + 1);
   radius = 250;
 
-  constructor(private dialog: MatDialog) { }
+  gameId: string = '';
+
+  constructor(private route: ActivatedRoute, private dialog: MatDialog,) {
+
+  }
+
+  getSingleGamesRef(gameId: string) {
+    return doc(this.firestore, 'games', gameId);
+  }
 
   cardTransform(i: number): string {
     const n = this.cards.length;
@@ -35,6 +47,29 @@ export class GameComponent {
     return `translate(-50%, -50%) rotate(${angle}deg) translate(${this.radius}px) rotate(${-angle}deg)`;
   }
 
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      this.gameId = params['id'];
+      this.subscribeGame(this.gameId);
+    });
+  };
+
+  subscribeGame(gameId: string) {
+    onSnapshot(this.getSingleGamesRef(gameId), (snapshot) => {
+      let gameupdait: any = snapshot.data();
+      this.game.players = gameupdait.players;
+      this.game.stack = gameupdait.stack;
+      this.game.playedCards = gameupdait.playedCards;
+      this.game.currentPlayerIndex = gameupdait.currentPlayerIndex;
+    });
+
+  };
+
+  async saveGame(){
+     await updateDoc(this.getSingleGamesRef(this.gameId), this.game.toJSON()).catch(
+        (err) => { console.log('error updating document:', err); }
+      );
+  }
 
   pickedCard(i: number) {
 
@@ -42,21 +77,23 @@ export class GameComponent {
       this.drawCardIndex = i
       this.drawn = true;
       this.getDrawnCard();
-      
+
       setTimeout(() => {
-      this.hiddenCards.add(i);
-    }, 600);
+        this.hiddenCards.add(i);
+      }, 600);
 
       setTimeout(() => {
         this.game.playedCards.push(this.currentCard);
         this.drawn = false;
         this.nexstPlayer();
+        this.saveGame();
       }, 1700);
     }
   }
 
   getDrawnCard() {
-    this.currentCard = this.game.stack.pop() ?? ''
+    this.currentCard = this.game.stack.pop() ?? '';
+    this.saveGame();
   }
 
   openDialog(): void {
@@ -66,6 +103,7 @@ export class GameComponent {
       const refArray = this.game.players;
       if (refArray.length <= 3 && result.length > 0 && result.length <= 8) {
         refArray.push(result);
+        this.saveGame();
       }
     });
   }
